@@ -25,6 +25,32 @@ function formatDate(timestamp) {
   return `${day} ${hours}:${minutes}`;
 }
 
+function displayForescast() {
+  let forescastElement = document.querySelector("#forescast");
+
+  let forescastHTML = `<div class="row">`;
+  let days = ["Thu", "Fri", "Sat", "Sun"];
+  days.forEach(function (day) {
+    forescastHTML =
+      forescastHTML +
+      `<div class="col-2">
+                  <div class="weather-forescast-date">${day}</div>
+                  <img
+                    src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/mist-night.png"
+                    alt=""
+                    width="42"
+                  />
+                  <div class="weather-forescast-temperature">
+                    <span class="weather-forescast-temperature-max"> 18° </span>
+                    <span class="weather-forescast-temperature-min"> 12° </span>
+                  </div>
+                </div>`;
+  });
+  forescastHTML = forescastHTML + `</div>`;
+
+  forescastElement.innerHTML = forescastHTML;
+}
+
 function displayTemperature(response) {
   let temperatureElement = document.querySelector("#temperature");
   let cityElement = document.querySelector("#city");
@@ -47,6 +73,8 @@ function displayTemperature(response) {
     `http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${response.data.condition.icon}.png`
   );
   iconElement.setAttribute("alt", response.data.condition.description);
+
+  console.log(response.data);
 }
 
 function search(city) {
@@ -93,3 +121,4 @@ let celsiuslink = document.querySelector("#celsius-link");
 celsiuslink.addEventListener("click", displaycelsiusTemperature);
 
 search("New York");
+displayForescast();
