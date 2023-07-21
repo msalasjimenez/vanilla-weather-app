@@ -25,30 +25,56 @@ function formatDate(timestamp) {
   return `${day} ${hours}:${minutes}`;
 }
 
-function displayForescast() {
+function formatDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let day = date.getDay();
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return days[day];
+}
+
+function displayForescast(response) {
+  let forescast = response.data.daily;
+
   let forescastElement = document.querySelector("#forescast");
 
   let forescastHTML = `<div class="row">`;
-  let days = ["Thu", "Fri", "Sat", "Sun"];
-  days.forEach(function (day) {
-    forescastHTML =
-      forescastHTML +
-      `<div class="col-2">
-                  <div class="weather-forescast-date">${day}</div>
+  forescast.forEach(function (forescastday, index) {
+    if (index < 6) {
+      forescastHTML =
+        forescastHTML +
+        `<div class="col-2">
+                  <div class="weather-forescast-date">${formatDay(
+                    forescastday.time
+                  )}</div>
                   <img
-                    src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/mist-night.png"
+                    src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${
+                      forescastday.condition.icon
+                    }.png"
                     alt=""
                     width="42"
                   />
                   <div class="weather-forescast-temperature">
-                    <span class="weather-forescast-temperature-max"> 18° </span>
-                    <span class="weather-forescast-temperature-min"> 12° </span>
+                    <span class="weather-forescast-temperature-max"> ${Math.round(
+                      forescastday.temperature.maximum
+                    )}° </span>
+                    <span class="weather-forescast-temperature-min"> ${Math.round(
+                      forescastday.temperature.minimum
+                    )}° </span>
                   </div>
                 </div>`;
+    }
   });
   forescastHTML = forescastHTML + `</div>`;
-
   forescastElement.innerHTML = forescastHTML;
+}
+
+function getForescast(coordinates) {
+  console.log(coordinates);
+  let apiKey = "4031af3089baee44t6720aff433o521e";
+  let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${coordinates.longitude}&lat=${coordinates.latitude}&key=${apiKey}&units=metric`;
+  console.log(apiUrl);
+  axios.get(apiUrl).then(displayForescast);
 }
 
 function displayTemperature(response) {
@@ -74,7 +100,7 @@ function displayTemperature(response) {
   );
   iconElement.setAttribute("alt", response.data.condition.description);
 
-  console.log(response.data);
+  getForescast(response.data.coordinates);
 }
 
 function search(city) {
@@ -121,4 +147,3 @@ let celsiuslink = document.querySelector("#celsius-link");
 celsiuslink.addEventListener("click", displaycelsiusTemperature);
 
 search("New York");
-displayForescast();
