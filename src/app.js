@@ -116,34 +116,7 @@ function handlesubmit(event) {
   search(cityInputElement.value);
 }
 
-function displayfahrenheitTemperature(event) {
-  event.preventDefault();
-  let temperatureElement = document.querySelector("#temperature");
-  //borrar el activo del enlace de celsius
-  celsiuslink.classList.remove("active");
-  //agregar el activo
-  fahrenheitlink.classList.add("active");
-  let fahrenheitTemperature = (celsiustemperature * 9) / 5 + 32;
-  temperatureElement.innerHTML = Math.round(fahrenheitTemperature);
-}
-
-function displaycelsiusTemperature(event) {
-  event.preventDefault();
-  celsiuslink.classList.add("active");
-  fahrenheitlink.classList.remove("active");
-  let temperatureElement = document.querySelector("#temperature");
-  temperatureElement.innerHTML = Math.round(celsiustemperature);
-}
-
-let celsiustemperature = null;
-
 let form = document.querySelector("#search-form");
 form.addEventListener("submit", handlesubmit);
-
-let fahrenheitlink = document.querySelector("#fahrenheit-link");
-fahrenheitlink.addEventListener("click", displayfahrenheitTemperature);
-
-let celsiuslink = document.querySelector("#celsius-link");
-celsiuslink.addEventListener("click", displaycelsiusTemperature);
 
 search("New York");
